@@ -1,19 +1,19 @@
 package com.mironov.sessions_app.DTO;
 
 public class MessageDTO {
-    private Integer id;
-    private LobbyDTO lobby; // Включаем DTO для лобби
+    private Long id;
+    private LobbyDTO lobby;
     private String text;
     private String pictureLink;
     private String createdAt;
-    private UserDTO user; // Включаем DTO для пользователя
+    private UserDTO user;
 
     // Геттеры и сеттеры
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

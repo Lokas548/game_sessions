@@ -1,16 +1,16 @@
 package com.mironov.sessions_app.DTO;
 
 public class GameDTO {
-    private Integer id;
+    private Long id;
     private String name;
     private String genre;
 
     // Геттеры и сеттеры
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
