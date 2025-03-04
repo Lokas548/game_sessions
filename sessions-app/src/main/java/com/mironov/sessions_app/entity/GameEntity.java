@@ -8,18 +8,11 @@ import jakarta.persistence.*;
 public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long gameId;
     private String name;
     private String genre;
+    private Integer maxLobbyCapacity;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -35,5 +28,21 @@ public class GameEntity {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public Integer getMaxLobbyCapacity() {
+        return maxLobbyCapacity;
+    }
+
+    public void setMaxLobbyCapacity(Integer maxLobbyCapacity) {
+        this.maxLobbyCapacity = maxLobbyCapacity;
+    }
+
+    public Long getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(Long gameId) {
+        this.gameId = gameId;
     }
 }

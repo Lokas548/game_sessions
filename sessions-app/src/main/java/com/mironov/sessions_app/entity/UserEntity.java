@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "app_user")
 public class UserEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
-
     @Column(unique = true)
     private String email;
     private String passwordHash;

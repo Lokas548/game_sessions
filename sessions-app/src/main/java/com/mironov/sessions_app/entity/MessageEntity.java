@@ -5,32 +5,19 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "message")
 public class MessageEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long messageId;
     @ManyToOne
     @JoinColumn(name = "lobby_id")
     private LobbyEntity lobby;
-
     private String text;
-
     private String pictureLink;
-
     private String createdAt;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public LobbyEntity getLobby() {
         return lobby;
@@ -70,5 +57,13 @@ public class MessageEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public Long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Long messageId) {
+        this.messageId = messageId;
     }
 }

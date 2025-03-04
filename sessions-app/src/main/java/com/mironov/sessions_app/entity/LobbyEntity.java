@@ -4,26 +4,15 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "lobby")
 public class LobbyEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long lobbyId;
     private String name;
-
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
-
     private String createdAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Integer currentCapacity;
 
     public String getName() {
         return name;
@@ -47,5 +36,21 @@ public class LobbyEntity {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getCurrentCapacity() {
+        return currentCapacity;
+    }
+
+    public void setCurrentCapacity(Integer currentCapacity) {
+        this.currentCapacity = currentCapacity;
+    }
+
+    public Long getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(Long lobbyId) {
+        this.lobbyId = lobbyId;
     }
 }

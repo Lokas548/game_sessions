@@ -5,28 +5,16 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user_games")
 public class UserGameEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long userGameId;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
     @ManyToOne
     @JoinColumn(name = "game_id")
     private GameEntity game;
-
     private String rankValue;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public UserEntity getUser() {
         return user;
@@ -50,5 +38,13 @@ public class UserGameEntity {
 
     public void setRankValue(String rankValue) {
         this.rankValue = rankValue;
+    }
+
+    public Long getUserGameId() {
+        return userGameId;
+    }
+
+    public void setUserGameId(Long userGameId) {
+        this.userGameId = userGameId;
     }
 }

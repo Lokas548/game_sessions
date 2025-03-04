@@ -6,6 +6,12 @@ public class UserDTO {
     private String password;
     private String username;
     private String createdAt;
+    private String token;
+
+    public UserDTO(Long id, String token) {
+        this.id = id;
+        this.token = token;
+    }
 
     // Геттеры и сеттеры
     public Long getId() {
@@ -46,6 +52,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
 

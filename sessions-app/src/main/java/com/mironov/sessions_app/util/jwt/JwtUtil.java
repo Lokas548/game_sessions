@@ -1,11 +1,9 @@
-package com.mironov.sessions_app.util;
-import com.mironov.sessions_app.entity.UserEntity;
+package com.mironov.sessions_app.util.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 @Component
