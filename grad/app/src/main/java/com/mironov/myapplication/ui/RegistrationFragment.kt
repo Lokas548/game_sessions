@@ -17,10 +17,43 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
-
-val auth = FirebaseAuth.getInstance()
+import com.mironov.myapplication.api.`interface`.ClientDto.UserData
+import com.mironov.myapplication.api.`interface`.ClientService.ApiClient
+import com.mironov.myapplication.api.`interface`.ResponseMessage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegistrationFragment : Fragment() {
+
+    // запрос на регистрацию
+    fun sendRegistrationRequest(username: String, password: String, callback: (Boolean) -> Unit) {
+        val userData = UserData(username, password)
+
+        val call = ApiClient.apiService.registration(userData)
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    callback(true) // Успешная регистрация
+                } else {
+                    Toast.makeText(requireActivity(), "Такой пользователь уже существует", Toast.LENGTH_SHORT).show()
+                    callback(false) // Ошибка регистрации
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                println("Failed to make request: ${t.message}") // Ошибка сети
+                Toast.makeText(requireActivity(), "Ошибка при выполнении запроса", Toast.LENGTH_SHORT).show()
+                callback(false) // Возвращаем false в случае ошибки
+            }
+        })
+    }
+
+
+
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,18 +125,17 @@ class RegistrationFragment : Fragment() {
                 isValid = false
             }
             if (isValid) {
-                auth.createUserWithEmailAndPassword(text,firstPass).addOnCompleteListener { ans ->
-                    if(ans.isSuccessful){
-                        loginData.edit().putBoolean("isRegistered", true).apply()
-                        loginData.edit().putBoolean("isAutoAuthActive", false).apply()
+                println("Sending registration request...")
+                sendRegistrationRequest(text, firstPass) { isRegSuccessful ->
+                    println("Registration successful: $isRegSuccessful")
+                    if (isRegSuccessful) {
                         Toast.makeText(requireActivity(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
                         navController.navigate(R.id.loginFragment)
                     }
-                }.addOnFailureListener { exception ->
-                    Toast.makeText(requireActivity(),"Что-то пошло не так", Toast.LENGTH_SHORT).show()
                 }
-
             }
+
+
 
         }
 

@@ -6,6 +6,13 @@ import org.springframework.stereotype.Component;
 public class AuthTokenResponse {
     private String jwtToken;
 
+    public AuthTokenResponse() {
+    }
+
+    public AuthTokenResponse(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
     public String getJwtToken() {
         return jwtToken;
     }

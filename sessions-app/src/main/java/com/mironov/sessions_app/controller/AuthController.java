@@ -1,6 +1,7 @@
 package com.mironov.sessions_app.controller;
 
 import com.mironov.sessions_app.DTO.UserDTO;
+import com.mironov.sessions_app.DTO.response.AuthTokenResponse;
 import com.mironov.sessions_app.entity.UserEntity;
 import com.mironov.sessions_app.service.UserService;
 import com.mironov.sessions_app.util.jwt.JwtUtil;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userAuthData){
+    public ResponseEntity<AuthTokenResponse> login(@RequestBody UserDTO userAuthData){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userAuthData.getEmail(),userAuthData.getPassword()));
 
@@ -39,7 +40,8 @@ public class AuthController {
         final UserDetails user = userDetailsService.loadUserByUsername(userAuthData.getEmail());
 
         String jwt = jwtUtil.generateToken(user.getUsername(), userEntity.getId());
-        return ResponseEntity.ok(new UserDTO(userEntity.getId(),jwt));
+
+        return ResponseEntity.ok(new AuthTokenResponse(jwt));
     }
 
 

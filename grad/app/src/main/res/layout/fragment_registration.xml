@@ -84,6 +84,7 @@
             android:autofillHints="a"
             android:inputType="textPassword"
             android:hint="Еще раз пароль" />
+
         <Button
             android:id="@+id/registrationBtn"
             android:layout_marginTop="25dp"
