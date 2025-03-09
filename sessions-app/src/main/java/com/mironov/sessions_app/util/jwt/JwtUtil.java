@@ -13,7 +13,7 @@ public class JwtUtil {
     public String generateToken(String email, Long userId) {
         return Jwts.builder()
                 .setSubject(email)
-                .claim("userId", userId) // Добавляем ID пользователя в полезную нагрузку
+                .claim("userId", userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 часов
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

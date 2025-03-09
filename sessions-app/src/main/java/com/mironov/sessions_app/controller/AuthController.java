@@ -1,14 +1,17 @@
 package com.mironov.sessions_app.controller;
 
+import com.mironov.sessions_app.DTO.AuthDTO;
 import com.mironov.sessions_app.DTO.UserDTO;
 import com.mironov.sessions_app.DTO.response.AuthTokenResponse;
 import com.mironov.sessions_app.entity.UserEntity;
 import com.mironov.sessions_app.service.UserService;
 import com.mironov.sessions_app.util.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +35,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthTokenResponse> login(@RequestBody UserDTO userAuthData){
+    @Tag(name = "Авторизация")
+    public ResponseEntity<AuthTokenResponse> login(@RequestBody AuthDTO userAuthData){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userAuthData.getEmail(),userAuthData.getPassword()));
 
@@ -46,7 +50,8 @@ public class AuthController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity<Void> registration(@RequestBody UserDTO userRegistrationData) {
+    @Tag(name = "Регистрация")
+    public ResponseEntity<Void> registration(@RequestBody AuthDTO userRegistrationData) {
         userService.saveUser(userRegistrationData);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }

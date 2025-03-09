@@ -2,6 +2,7 @@ package com.mironov.sessions_app.controller;
 
 import com.mironov.sessions_app.service.UserService;
 import com.mironov.sessions_app.util.jwt.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,12 +18,14 @@ public class MainController {
     }
 
     @GetMapping("/test")
+    @Tag(name = "Тест для retrofit")
     public ResponseMessage testMessage(){
         System.out.println("get");
         return new ResponseMessage("hello world!");
     }
 
     @GetMapping("/decrypt-token/")
+    @Tag(name = "Тест email по токену")
     public String decryption(@RequestParam String token){
         return jwtUtil.extractUsername(token);
     }
