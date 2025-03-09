@@ -39,6 +39,11 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User with email" + email + "not found"));
     }
 
+    public UserEntity loadUserById(Long userId){
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User with id" + userId + "not found"));
+    }
+
     public void updateUsername(UserDTO userData){
 
         if(userRepository.findByUsername(userData.getUsername()).isPresent()){

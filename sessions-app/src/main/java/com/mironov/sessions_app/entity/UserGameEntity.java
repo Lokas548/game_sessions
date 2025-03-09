@@ -16,6 +16,15 @@ public class UserGameEntity {
     private GameEntity game;
     private String rankValue;
 
+    public UserGameEntity() {
+    }
+
+    public UserGameEntity(String rankValue, GameEntity game, UserEntity user) {
+        this.rankValue = rankValue;
+        this.game = game;
+        this.user = user;
+    }
+
     public UserEntity getUser() {
         return user;
     }

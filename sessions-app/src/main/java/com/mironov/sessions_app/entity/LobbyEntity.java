@@ -1,7 +1,6 @@
 package com.mironov.sessions_app.entity;
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name = "lobby")
