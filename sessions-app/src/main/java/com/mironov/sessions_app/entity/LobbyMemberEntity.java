@@ -16,6 +16,15 @@ public class LobbyMemberEntity {
     private String joinedAt;
 
 
+    public LobbyMemberEntity() {
+    }
+
+    public LobbyMemberEntity(LobbyEntity lobby, UserEntity user, String joinedAt) {
+        this.lobby = lobby;
+        this.user = user;
+        this.joinedAt = joinedAt;
+    }
+
     public LobbyEntity getLobby() {
         return lobby;
     }

@@ -1,14 +1,23 @@
 package com.mironov.sessions_app.controller;
 
 import com.mironov.sessions_app.entity.LobbyEntity;
+import com.mironov.sessions_app.entity.LobbyMemberEntity;
+import com.mironov.sessions_app.entity.UserEntity;
+import com.mironov.sessions_app.service.LobbyMemberService;
 import com.mironov.sessions_app.service.LobbyService;
+import com.mironov.sessions_app.service.UserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,9 +31,14 @@ import org.springframework.web.bind.annotation.*;
 )
 public class LobbyController {
     private final LobbyService lobbyService;
+    private final UserService userService;
+    private final LobbyMemberService lobbyMemberService;
 
-    public LobbyController(LobbyService lobbyService) {
+    public LobbyController(LobbyService lobbyService, UserService userService, LobbyMemberService lobbyMemberService) {
         this.lobbyService = lobbyService;
+        this.userService = userService;
+        this.lobbyMemberService = lobbyMemberService;
+
     }
 
     @GetMapping("/lobby")
@@ -41,6 +55,38 @@ public class LobbyController {
     public ResponseEntity<LobbyEntity> createLobby(@RequestBody LobbyEntity lobby){
         LobbyEntity responseEntity = lobbyService.createLobby(lobby);
         return ResponseEntity.ok(responseEntity);
+    }
+
+    @PostMapping("/join-lobby")
+    @SecurityRequirement(name = "JWT")
+    @Tag(name = "Присоединится к лобби")
+    public ResponseEntity joinLobby(@RequestParam Long lobbyId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LobbyEntity lobby = lobbyService.getLobbyById(lobbyId);
+        UserEntity user = userService.loadUserByEmail(authentication.getName());
+
+
+        if(lobbyMemberService.isUserInLobby(user,lobby))
+            return ResponseEntity.badRequest().body("Такой пользватель уже в лобби");
+        return lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
+    }
+
+    @GetMapping("/get-lobby-members")
+    @SecurityRequirement(name = "JWT")
+    @Tag(name = "Все участники лобби")
+    private ResponseEntity<List<UserEntity>> getAllMembers(Long lobbyId){
+        LobbyEntity lobby = lobbyService.getLobbyById(lobbyId);
+        return ResponseEntity.ok(lobbyMemberService.findAllUsersInLobby(lobby));
+    }
+
+    @DeleteMapping("/leave-lobby")
+    @SecurityRequirement(name = "JWT")
+    @Tag(name = "Покинуть лобби")
+    private ResponseEntity leaveLobby(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = userService.loadUserByEmail(authentication.getName());
+        lobbyMemberService.deleteUserFromLobby(user);
+        return ResponseEntity.ok("Пользователь удален");
     }
 
 }
