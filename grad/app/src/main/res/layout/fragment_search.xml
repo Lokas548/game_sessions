@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".ui.SearchFragment"
+    android:id="@+id/secondFragment"
+    tools:ignore="MissingConstraints">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_bar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginRight="32dp"
+            android:hint="Введите название"
+            tools:ignore="MissingConstraints">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Найти"
+            android:drawableRight="@drawable/search_button_icon"
+            app:layout_constraintTop_toBottomOf="@id/searchBtn"
+            app:layout_constraintLeft_toRightOf="@+id/search_bar"
+            />
+
+        <Button
+            android:id="@+id/searchBtn"
+            android:text="Фильтры"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toRightOf="@+id/search_bar"
+             />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_marginStart="44dp"
+
+            android:paddingTop="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/recycler_item" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

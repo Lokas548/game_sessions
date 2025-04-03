@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:id="@+id/thirdFragment"
+    tools:context=".ui.ProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <io.getstream.avatarview.AvatarView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:avatarViewBorderColor="@color/beige"
+            app:avatarViewBorderWidth="3dp"
+            app:avatarViewIndicatorBorderColor="@color/white"
+            app:avatarViewIndicatorBorderSizeCriteria="10"
+            app:avatarViewIndicatorColor="@color/beige"
+            app:avatarViewIndicatorEnabled="true"
+            app:avatarViewIndicatorPosition="bottomRight"
+            app:avatarViewIndicatorSizeCriteria="9"
+            app:avatarViewInitialsTextStyle="bold"
+            app:avatarViewShape="circle" />
+
+    </LinearLayout>
+
+</FrameLayout>

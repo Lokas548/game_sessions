@@ -26,11 +26,18 @@ public class LobbyMemberService {
     }
 
     public List<UserEntity> findAllUsersInLobby(LobbyEntity lobby){
-        List<?> list = lobbyMemberRepository.findUsersByLobby(lobby);
         return lobbyMemberRepository.findUsersByLobby(lobby);
     }
 
     public void deleteUserFromLobby(UserEntity user){
         lobbyMemberRepository.deleteUserById(user.getId());
+    }
+
+    public LobbyEntity findLobbyByUser(UserEntity user){
+        return lobbyMemberRepository.findLobbyByUser(user);
+    }
+
+    public Long getCurrentLobbyCapacity(LobbyEntity lobby){
+        return lobbyMemberRepository.countByLobby(lobby);
     }
 }

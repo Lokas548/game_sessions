@@ -3,6 +3,7 @@ package com.mironov.sessions_app.controller;
 import com.mironov.sessions_app.entity.LobbyEntity;
 import com.mironov.sessions_app.entity.LobbyMemberEntity;
 import com.mironov.sessions_app.entity.UserEntity;
+import com.mironov.sessions_app.service.GameService;
 import com.mironov.sessions_app.service.LobbyMemberService;
 import com.mironov.sessions_app.service.LobbyService;
 import com.mironov.sessions_app.service.UserService;
@@ -33,12 +34,13 @@ public class LobbyController {
     private final LobbyService lobbyService;
     private final UserService userService;
     private final LobbyMemberService lobbyMemberService;
+    private final GameService gameService;
 
-    public LobbyController(LobbyService lobbyService, UserService userService, LobbyMemberService lobbyMemberService) {
+    public LobbyController(LobbyService lobbyService, UserService userService, LobbyMemberService lobbyMemberService, GameService gameService) {
         this.lobbyService = lobbyService;
         this.userService = userService;
         this.lobbyMemberService = lobbyMemberService;
-
+        this.gameService = gameService;
     }
 
     @GetMapping("/lobby")
@@ -48,6 +50,14 @@ public class LobbyController {
         LobbyEntity responseEntity = lobbyService.getLobbyById(lobbyId);
         return ResponseEntity.ok(responseEntity);
     }
+
+    //TODO
+//    @GetMapping("/lobby-filtered")
+//    @SecurityRequirement(name = "JWT")
+//    @Tag(name = "Получение лобби с фильтрами")
+//    public ResponseEntity<List<LobbyEntity>> getFilteredLobbies(){
+//
+//    }
 
     @PostMapping("/lobby")
     @SecurityRequirement(name = "JWT")
@@ -63,11 +73,17 @@ public class LobbyController {
     public ResponseEntity joinLobby(@RequestParam Long lobbyId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LobbyEntity lobby = lobbyService.getLobbyById(lobbyId);
+        lobby.getGameId();
         UserEntity user = userService.loadUserByEmail(authentication.getName());
+        Long currentCapacity = lobbyMemberService.getCurrentLobbyCapacity(lobby);
+        System.out.println(currentCapacity);
 
 
         if(lobbyMemberService.isUserInLobby(user,lobby))
             return ResponseEntity.badRequest().body("Такой пользватель уже в лобби");
+        if(gameService.getGameById(lobby.getGameId()).getMaxLobbyCapacity() >= currentCapacity){
+            return ResponseEntity.badRequest().body("Максимальное число пользователей в лобби");
+        }
         return lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
     }
 

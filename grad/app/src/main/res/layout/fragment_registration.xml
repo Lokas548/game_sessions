@@ -32,28 +32,7 @@
         android:id="@+id/buttonLl"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/firstBtn"
-            android:backgroundTint="@color/purple_red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="По номеру"
-            android:textSize="12sp"
-            android:textColor="@color/beige"
-            android:textAlignment="center" />
-        <Button
-            android:id="@+id/secondBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/purple_red"
-            android:textSize="12sp"
-            android:text="По почте"
-            android:layout_weight="1"
-            android:textColor="@color/beige"
-            android:textAlignment="center"
-            app:layout_constraintRight_toRightOf="@+id/buttonsConstraint"
-            />
+
     </LinearLayout>
 
     <LinearLayout

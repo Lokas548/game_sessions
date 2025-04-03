@@ -41,4 +41,8 @@ class ContentActivity : AppCompatActivity() {
             }
         }
     }
+    override fun onBackPressed() {
+
+    }
+
 }

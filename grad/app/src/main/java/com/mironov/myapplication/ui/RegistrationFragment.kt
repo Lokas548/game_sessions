@@ -34,7 +34,8 @@ class RegistrationFragment : Fragment() {
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    callback(true) // Успешная регистрация
+                    callback(true)
+                    // Успешная регистрация
                 } else {
                     Toast.makeText(requireActivity(), "Такой пользователь уже существует", Toast.LENGTH_SHORT).show()
                     callback(false) // Ошибка регистрации
@@ -50,19 +51,12 @@ class RegistrationFragment : Fragment() {
     }
 
 
-
-
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_registration, container, false)
         val navController = NavHostFragment.findNavController(this)
-        val phoneNumberBtn = root.findViewById<Button>(R.id.firstBtn)
-        val emailBtn = root.findViewById<Button>(R.id.secondBtn)
         val regBTN = root.findViewById<Button>(R.id.registrationBtn)
         val goToAuthBtn = root.findViewById<Button>(R.id.goToAuth)
 
@@ -75,35 +69,12 @@ class RegistrationFragment : Fragment() {
         var isPhoneActive : Boolean = false
 
         //При инициализации экрана активна кнопка "по почте"
-        emailBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-        emailBtn.setTextColor(Color.parseColor("#000000"))
         regEditText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
 
-        phoneNumberBtn.setOnClickListener {
-            phoneNumberBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-            phoneNumberBtn.setTextColor(Color.parseColor("#000000"))
 
-            regEditText.inputType = InputType.TYPE_CLASS_PHONE
-            emailBtn.setBackgroundColor(Color.parseColor("#651720"))
-            emailBtn.setTextColor(Color.parseColor("#CA9760"))
 
-            regEditText.setHint("Введите номер")
-            isPhoneActive = true;
 
-        }
-
-        emailBtn.setOnClickListener {
-            emailBtn.setBackgroundColor(Color.parseColor("#FFBB86FC"))
-            emailBtn.setTextColor(Color.parseColor("#000000"))
-
-            regEditText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            phoneNumberBtn.setBackgroundColor(Color.parseColor("#651720"))
-            phoneNumberBtn.setTextColor(Color.parseColor("#CA9760"))
-
-            regEditText.setHint("Введите почту")
-            isPhoneActive = false;
-        }
 
         regBTN.setOnClickListener {
             var text = regEditText.text.toString();
@@ -111,31 +82,18 @@ class RegistrationFragment : Fragment() {
             var secondPass = secondPasswordEditText.text.toString()
             var isValid = true
 
-            if (isPhoneActive) {
-                if (!isPhoneNumberValid(text)) {
-                    isValid = false
-                }
-            } else {
-                if (!isEmailValid(text)) {
-                    isValid = false
-                }
-            }
-
-            if (!isPasswordValid(firstPass, secondPass)) {
+            if (!isEmailValid(text) || !isPasswordValid(firstPass, secondPass)) {
                 isValid = false
             }
+
             if (isValid) {
-                println("Sending registration request...")
                 sendRegistrationRequest(text, firstPass) { isRegSuccessful ->
-                    println("Registration successful: $isRegSuccessful")
                     if (isRegSuccessful) {
                         Toast.makeText(requireActivity(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
                         navController.navigate(R.id.loginFragment)
                     }
                 }
             }
-
-
 
         }
 
@@ -147,18 +105,9 @@ class RegistrationFragment : Fragment() {
 
     }
 
-
     private fun isEmailValid(email: String): Boolean {
         if(!email.contains("@")){
             Toast.makeText(requireActivity(),"В почте нет @", Toast.LENGTH_SHORT).show()
-            return false
-        }
-        return true
-    }
-
-    private fun isPhoneNumberValid(phone: String): Boolean{
-        if(phone[0] != '+'){
-            Toast.makeText(requireActivity(),"Некорректный номер телефона", Toast.LENGTH_SHORT).show()
             return false
         }
         return true

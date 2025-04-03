@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:autofillHints="a"
-            android:hint="Номер/почта"/>
+            android:hint="Почта"/>
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"

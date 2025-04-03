@@ -33,13 +33,19 @@
 
     <fragment
         android:id="@+id/firstFragment"
-        android:name="com.mironov.myapplication.oneFragment"
+        android:name="com.mironov.myapplication.LobbyFragment"
         android:label="firstFragment"
         />
 
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.mironov.myapplication.twoFragment"
+        android:name="com.mironov.myapplication.ui.SearchFragment"
         android:label="secondFragment"
+        />
+
+    <fragment
+        android:id="@+id/thirdFragment"
+        android:name="com.mironov.myapplication.ui.ProfileFragment"
+        android:label="thirdFragment"
         />
 </navigation>

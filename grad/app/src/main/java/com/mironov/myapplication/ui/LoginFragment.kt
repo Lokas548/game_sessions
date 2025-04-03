@@ -71,8 +71,6 @@ class LoginFragment : Fragment() {
                     if (jwtToken != null) {
                         storage.saveJwtToken(jwtToken)
                         navController.navigate(R.id.firstFragment)
-                    } else {
-                        Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
