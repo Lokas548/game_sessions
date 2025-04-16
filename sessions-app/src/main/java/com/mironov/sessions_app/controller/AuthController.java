@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1")
 public class AuthController {
+
     private final UserService userService;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtUtil jwtUtil;
-
     private final UserDetailsService userDetailsService;
 
     public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserDetailsService userDetailsService) {
@@ -35,22 +33,20 @@ public class AuthController {
     @PostMapping("/login")
     @Tag(name = "Авторизация")
     public ResponseEntity<AuthTokenResponse> login(@RequestBody AuthDTO userAuthData){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userAuthData.getEmail(),userAuthData.getPassword()));
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthData.getEmail(),userAuthData.getPassword()));
 
         final UserEntity userEntity = userService.loadUserByEmail(userAuthData.getEmail());
         final UserDetails user = userDetailsService.loadUserByUsername(userAuthData.getEmail());
 
-        String jwt = jwtUtil.generateToken(user.getUsername(), userEntity.getId());
-
-        return ResponseEntity.ok(new AuthTokenResponse(jwt));
+        return ResponseEntity.ok(new AuthTokenResponse(jwtUtil.generateToken(user.getUsername(), userEntity.getId())));
     }
 
 
     @PostMapping("/registration")
     @Tag(name = "Регистрация")
-    public ResponseEntity<Void> registration(@RequestBody AuthDTO userRegistrationData) {
+    public String registration(@RequestBody AuthDTO userRegistrationData) {
         userService.saveUser(userRegistrationData);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        return "200";
     }
 }

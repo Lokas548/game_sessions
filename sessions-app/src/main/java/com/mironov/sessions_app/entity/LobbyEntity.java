@@ -1,6 +1,6 @@
 package com.mironov.sessions_app.entity;
+import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "lobby")
@@ -14,14 +14,14 @@ public class LobbyEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
     private String createdAt;
-    private Integer currentCapacity;
+    private Long currentCapacity;
     private boolean isCompetitive;
 
     public LobbyEntity() {
 
     }
 
-    public LobbyEntity(Long gameId, String name, UserEntity owner, String createdAt, Integer currentCapacity, boolean isCompetitive) {
+    public LobbyEntity(Long gameId, String name, UserEntity owner, String createdAt, Long currentCapacity, boolean isCompetitive) {
         this.gameId = gameId;
         this.name = name;
         this.owner = owner;
@@ -54,11 +54,11 @@ public class LobbyEntity {
         this.createdAt = createdAt;
     }
 
-    public Integer getCurrentCapacity() {
+    public Long getCurrentCapacity() {
         return currentCapacity;
     }
 
-    public void setCurrentCapacity(Integer currentCapacity) {
+    public void setCurrentCapacity(Long currentCapacity) {
         this.currentCapacity = currentCapacity;
     }
 
@@ -84,5 +84,23 @@ public class LobbyEntity {
 
     public void setCompetitive(boolean competitive) {
         isCompetitive = competitive;
+    }
+
+    public static FilteredLobbiesResponse convertToFilteredLobbiesResponse(LobbyEntity lobby){
+        return new FilteredLobbiesResponse
+                (lobby.getLobbyId(),
+                lobby.getName(),
+                lobby.getCurrentCapacity(),
+                lobby.getGameId(),
+                lobby.isCompetitive());
+
+    }
+
+    public void increment(){
+        this.currentCapacity++;
+    }
+
+    public void decrement(){
+        this.currentCapacity--;
     }
 }

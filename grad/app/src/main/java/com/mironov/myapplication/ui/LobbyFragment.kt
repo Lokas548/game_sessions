@@ -17,7 +17,7 @@ class LobbyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_lobby, container, false)
-        val recycler = root.findViewById<RecyclerView>(R.id.recycler)
+        val recycler = root.findViewById<RecyclerView>(R.id.filterRecycler)
         recycler.layoutManager = LinearLayoutManager(requireContext())
         return root
 

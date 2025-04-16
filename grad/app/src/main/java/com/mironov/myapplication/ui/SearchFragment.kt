@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.navigation.fragment.NavHostFragment
 import com.mironov.myapplication.R
 
 class SearchFragment : Fragment() {
@@ -17,7 +19,19 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_search, container, false)
+
+        val root = inflater.inflate(R.layout.fragment_search, container, false)
+        val navController = NavHostFragment.findNavController(this)
+        val searchButton = root.findViewById<Button>(R.id.filterBtn)
+
+        searchButton.setOnClickListener{
+            println("1")
+            navController.navigate(R.id.lobbyFilterFragment)
+        }
+
+        return root
+
     }
+
 
 }

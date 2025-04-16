@@ -13,7 +13,7 @@
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_splashFragment_to_listFragment"
-            app:destination="@id/firstFragment" />
+            app:destination="@id/lobbyFragment" />
         <action
             android:id="@+id/action_splashFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
@@ -26,22 +26,43 @@
     </fragment>
 
     <fragment
-        android:id="@+id/registrationFragment"
-        android:name="com.mironov.myapplication.RegistrationFragment"
-        android:label="RegistrationFragment">
+        android:id="@+id/postRegistrationFragment"
+        android:name="com.mironov.myapplication.ui.PostRegistrationFragment"
+        android:label="PostRegistrationFragment">
     </fragment>
 
     <fragment
-        android:id="@+id/firstFragment"
+        android:id="@+id/registrationFragment"
+        android:name="com.mironov.myapplication.RegistrationFragment"
+        android:label="RegistrationFragment">
+        <action
+            android:id="@+id/action_registrationFragment_to_postRegistrationFragment"
+            app:destination="@id/postRegistrationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lobbyFragment"
         android:name="com.mironov.myapplication.LobbyFragment"
-        android:label="firstFragment"
+        android:label="lobbyFragment"
         />
 
     <fragment
-        android:id="@+id/secondFragment"
+        android:id="@+id/lobbyFilterFragment"
         android:name="com.mironov.myapplication.ui.SearchFragment"
-        android:label="secondFragment"
+        android:label="lobbyFilterFragment"
         />
+
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.mironov.myapplication.ui.SearchFragment"
+        android:label="searchFragment">
+        <action
+            android:id="@+id/action_searchFragment_to_lobbyFilterFragment"
+            app:destination="@id/lobbyFilterFragment" />
+        />
+    </fragment>
+
 
     <fragment
         android:id="@+id/thirdFragment"

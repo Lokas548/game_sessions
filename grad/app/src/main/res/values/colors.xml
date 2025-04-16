@@ -12,4 +12,5 @@
     <color name="beige">#CA9760</color>
     <color name="light_blue">	#1E90FF</color>
     <color name="white_beige"> #FEFAE0</color>
+    <color name="light_grey"> #BBBBBB</color>
 </resources>

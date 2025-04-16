@@ -37,7 +37,5 @@ public class LobbyMemberService {
         return lobbyMemberRepository.findLobbyByUser(user);
     }
 
-    public Long getCurrentLobbyCapacity(LobbyEntity lobby){
-        return lobbyMemberRepository.countByLobby(lobby);
-    }
+
 }

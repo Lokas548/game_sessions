@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
                 sendLoginRequest(inputText.text.toString(), password.text.toString()) { jwtToken ->
                     if (jwtToken != null) {
                         storage.saveJwtToken(jwtToken)
-                        navController.navigate(R.id.firstFragment)
+                        navController.navigate(R.id.lobbyFragment)
                     }
                 }
             }

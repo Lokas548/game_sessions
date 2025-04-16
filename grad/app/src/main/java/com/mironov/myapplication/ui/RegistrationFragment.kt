@@ -35,17 +35,16 @@ class RegistrationFragment : Fragment() {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     callback(true)
-                    // Успешная регистрация
                 } else {
                     Toast.makeText(requireActivity(), "Такой пользователь уже существует", Toast.LENGTH_SHORT).show()
-                    callback(false) // Ошибка регистрации
+                    callback(false)
                 }
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 println("Failed to make request: ${t.message}") // Ошибка сети
                 Toast.makeText(requireActivity(), "Ошибка при выполнении запроса", Toast.LENGTH_SHORT).show()
-                callback(false) // Возвращаем false в случае ошибки
+                callback(false)
             }
         })
     }
@@ -59,21 +58,12 @@ class RegistrationFragment : Fragment() {
         val navController = NavHostFragment.findNavController(this)
         val regBTN = root.findViewById<Button>(R.id.registrationBtn)
         val goToAuthBtn = root.findViewById<Button>(R.id.goToAuth)
-
         val regEditText = root.findViewById<EditText>(R.id.firstEditText)
         val firstPasswordEditText = root.findViewById<EditText>(R.id.firstPassword)
         val secondPasswordEditText = root.findViewById<EditText>(R.id.secondPassword)
-
         val loginData = requireActivity().getSharedPreferences("data", Context.MODE_PRIVATE)
 
-        var isPhoneActive : Boolean = false
-
-        //При инициализации экрана активна кнопка "по почте"
         regEditText.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-
-
-
-
 
 
         regBTN.setOnClickListener {
@@ -90,7 +80,7 @@ class RegistrationFragment : Fragment() {
                 sendRegistrationRequest(text, firstPass) { isRegSuccessful ->
                     if (isRegSuccessful) {
                         Toast.makeText(requireActivity(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
-                        navController.navigate(R.id.loginFragment)
+                        navController.navigate(R.id.postRegistrationFragment)
                     }
                 }
             }

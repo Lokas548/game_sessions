@@ -26,8 +26,7 @@ public interface LobbyMemberRepository extends JpaRepository<LobbyMemberEntity,L
     @Query("DELETE FROM LobbyMemberEntity lm WHERE lm.user.id = :id")
     void deleteUserById(@Param("id") Long userId);
 
-    @Query("SELECT lm.lobby FROM LobbyMemberEntity lm WHERE lm.user = :user AND lm.lobby = :lobby")
+    @Query("SELECT lm.lobby FROM LobbyMemberEntity lm WHERE lm.user = :user")  //AND lm.lobby = :lobby
     LobbyEntity findLobbyByUser(@Param("user") UserEntity user);
 
-    Long countByLobby(@Param("lobby") LobbyEntity lobby);
 }

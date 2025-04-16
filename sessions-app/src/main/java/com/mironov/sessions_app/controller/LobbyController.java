@@ -1,5 +1,7 @@
 package com.mironov.sessions_app.controller;
 
+import com.mironov.sessions_app.DTO.request.LobbyFilterRequest;
+import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
 import com.mironov.sessions_app.entity.LobbyEntity;
 import com.mironov.sessions_app.entity.LobbyMemberEntity;
 import com.mironov.sessions_app.entity.UserEntity;
@@ -30,6 +32,7 @@ import java.util.List;
         bearerFormat = "JWT",
         scheme = "bearer"
 )
+
 public class LobbyController {
     private final LobbyService lobbyService;
     private final UserService userService;
@@ -43,7 +46,7 @@ public class LobbyController {
         this.gameService = gameService;
     }
 
-    @GetMapping("/lobby")
+    @GetMapping("/get-lobby")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Получение информации о лобби")
     public ResponseEntity<LobbyEntity> getLobby(@RequestParam Long lobbyId){
@@ -52,14 +55,14 @@ public class LobbyController {
     }
 
     //TODO
-//    @GetMapping("/lobby-filtered")
-//    @SecurityRequirement(name = "JWT")
-//    @Tag(name = "Получение лобби с фильтрами")
-//    public ResponseEntity<List<LobbyEntity>> getFilteredLobbies(){
-//
-//    }
+    @GetMapping("/lobby-filtered")
+    @SecurityRequirement(name = "JWT")
+    @Tag(name = "Получение лобби с фильтрами")
+    public ResponseEntity<List<FilteredLobbiesResponse>> getFilteredLobbies(@RequestBody LobbyFilterRequest lobbyFilterRequest){
+        return ResponseEntity.ok(lobbyService.getFilteredLobbies());
+    }
 
-    @PostMapping("/lobby")
+    @PostMapping("/create-lobby")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Создать лобби")
     public ResponseEntity<LobbyEntity> createLobby(@RequestBody LobbyEntity lobby){
@@ -72,18 +75,19 @@ public class LobbyController {
     @Tag(name = "Присоединится к лобби")
     public ResponseEntity joinLobby(@RequestParam Long lobbyId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         LobbyEntity lobby = lobbyService.getLobbyById(lobbyId);
-        lobby.getGameId();
         UserEntity user = userService.loadUserByEmail(authentication.getName());
-        Long currentCapacity = lobbyMemberService.getCurrentLobbyCapacity(lobby);
-        System.out.println(currentCapacity);
 
 
         if(lobbyMemberService.isUserInLobby(user,lobby))
             return ResponseEntity.badRequest().body("Такой пользватель уже в лобби");
-        if(gameService.getGameById(lobby.getGameId()).getMaxLobbyCapacity() >= currentCapacity){
+        if(gameService.getGameById(lobby.getGameId()).getMaxLobbyCapacity() <= lobby.getCurrentCapacity()){
             return ResponseEntity.badRequest().body("Максимальное число пользователей в лобби");
         }
+
+        lobbyService.currentCapacityIncrement(lobby);
+
         return lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
     }
 
@@ -101,6 +105,10 @@ public class LobbyController {
     private ResponseEntity leaveLobby(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = userService.loadUserByEmail(authentication.getName());
+
+        LobbyEntity lobby = lobbyMemberService.findLobbyByUser(user);
+        lobbyService.currentCapacityDecrement(lobby);
+
         lobbyMemberService.deleteUserFromLobby(user);
         return ResponseEntity.ok("Пользователь удален");
     }

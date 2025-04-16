@@ -1,7 +1,6 @@
 package com.mironov.myapplication
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -24,7 +23,7 @@ class SplashFragment : Fragment() {
 
         if(isRegistered(loginData)){
             if(isChecked(loginData)){
-                navController.navigate(R.id.firstFragment)
+                navController.navigate(R.id.lobbyFragment)
             }
             else
                 navController.navigate(R.id.loginFragment)
