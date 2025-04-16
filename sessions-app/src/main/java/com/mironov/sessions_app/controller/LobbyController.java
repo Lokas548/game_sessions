@@ -39,12 +39,14 @@ public class LobbyController {
     private final LobbyMemberService lobbyMemberService;
     private final GameService gameService;
 
+
     public LobbyController(LobbyService lobbyService, UserService userService, LobbyMemberService lobbyMemberService, GameService gameService) {
         this.lobbyService = lobbyService;
         this.userService = userService;
         this.lobbyMemberService = lobbyMemberService;
         this.gameService = gameService;
     }
+
 
     @GetMapping("/get-lobby")
     @SecurityRequirement(name = "JWT")
@@ -54,13 +56,14 @@ public class LobbyController {
         return ResponseEntity.ok(responseEntity);
     }
 
-    //TODO
-    @GetMapping("/lobby-filtered")
+
+    @PostMapping("/lobby-filtered")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Получение лобби с фильтрами")
     public ResponseEntity<List<FilteredLobbiesResponse>> getFilteredLobbies(@RequestBody LobbyFilterRequest lobbyFilterRequest){
-        return ResponseEntity.ok(lobbyService.getFilteredLobbies());
+        return ResponseEntity.ok(lobbyService.getFilteredLobbies(lobbyFilterRequest));
     }
+
 
     @PostMapping("/create-lobby")
     @SecurityRequirement(name = "JWT")
@@ -69,6 +72,7 @@ public class LobbyController {
         LobbyEntity responseEntity = lobbyService.createLobby(lobby);
         return ResponseEntity.ok(responseEntity);
     }
+
 
     @PostMapping("/join-lobby")
     @SecurityRequirement(name = "JWT")
@@ -91,6 +95,7 @@ public class LobbyController {
         return lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
     }
 
+
     @GetMapping("/get-lobby-members")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Все участники лобби")
@@ -98,6 +103,7 @@ public class LobbyController {
         LobbyEntity lobby = lobbyService.getLobbyById(lobbyId);
         return ResponseEntity.ok(lobbyMemberService.findAllUsersInLobby(lobby));
     }
+
 
     @DeleteMapping("/leave-lobby")
     @SecurityRequirement(name = "JWT")

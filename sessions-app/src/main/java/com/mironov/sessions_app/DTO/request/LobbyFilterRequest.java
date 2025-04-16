@@ -5,19 +5,19 @@ import java.util.List;
 public class LobbyFilterRequest {
 
     private String lobbyName;
-    private List<String> gamesList;
+    private List<Long> gamesList;
     private boolean isRanked;
 
     public LobbyFilterRequest() {
     }
 
-    public LobbyFilterRequest(String lobbyName, List<String> gamesList, boolean isRanked) {
+    public LobbyFilterRequest(String lobbyName, List<Long> gamesList, boolean isRanked) {
         this.lobbyName = lobbyName;
         this.gamesList = gamesList;
         this.isRanked = isRanked;
     }
 
-    public LobbyFilterRequest(List<String> gamesList, boolean isRanked) {
+    public LobbyFilterRequest(List<Long> gamesList, boolean isRanked) {
         this.isRanked = isRanked;
         this.gamesList = gamesList;
     }
@@ -35,11 +35,11 @@ public class LobbyFilterRequest {
         this.lobbyName = lobbyName;
     }
 
-    public List<String> getGamesList() {
+    public List<Long> getGamesList() {
         return gamesList;
     }
 
-    public void setGamesList(List<String> gamesList) {
+    public void setGamesList(List<Long> gamesList) {
         this.gamesList = gamesList;
     }
 

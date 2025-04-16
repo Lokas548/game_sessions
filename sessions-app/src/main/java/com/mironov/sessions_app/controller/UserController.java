@@ -22,6 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
+
     @PutMapping("/set-username")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Установить никнейм пользователю")

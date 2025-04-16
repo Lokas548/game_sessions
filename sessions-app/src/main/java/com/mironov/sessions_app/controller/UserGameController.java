@@ -35,6 +35,7 @@ public class UserGameController {
 
     }
 
+
     @GetMapping("/get-user-games")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Получить игры и ранги пользователя")

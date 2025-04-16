@@ -1,12 +1,15 @@
 package com.mironov.sessions_app.service;
 
+import com.mironov.sessions_app.DTO.request.LobbyFilterRequest;
 import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
+import com.mironov.sessions_app.DTO.specifications.LobbySpecifications;
 import com.mironov.sessions_app.entity.LobbyEntity;
 import com.mironov.sessions_app.entity.LobbyMemberEntity;
 import com.mironov.sessions_app.entity.UserEntity;
 import com.mironov.sessions_app.repository.LobbyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,10 +55,17 @@ public class LobbyService {
         return lobbyRepository.save(lobby);
     }
 
-    public List<FilteredLobbiesResponse> getFilteredLobbies(){
+    public List<FilteredLobbiesResponse> getFilteredLobbies(LobbyFilterRequest lobbyFilterRequest){
 
-        List<LobbyEntity> list = lobbyRepository.findAll();
+
+        Specification<LobbyEntity> specifications = Specification.where(LobbySpecifications.hasName(lobbyFilterRequest.getLobbyName()))
+                .and(LobbySpecifications.hasGames(lobbyFilterRequest.getGamesList()))
+                .and(LobbySpecifications.hasCompetitive(lobbyFilterRequest.isRanked()));
+
+        List<LobbyEntity> list = lobbyRepository.findAll(specifications);
+
         List<FilteredLobbiesResponse> filteredLobbiesList = new ArrayList<>();
+
 
         for(LobbyEntity lobby : list){
             filteredLobbiesList.add(LobbyEntity.convertToFilteredLobbiesResponse(lobby));
