@@ -16,9 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;;
 
-
-
-///ИСПРАВИТЬ ТУТ ОШИБКИ МНОГО
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -51,7 +48,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
-
+        logger.info("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+        logger.info(request.getHeader("Authorization"));
         chain.doFilter(request, response);
     }
 }

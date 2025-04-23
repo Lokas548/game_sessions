@@ -1,12 +1,10 @@
 package com.mironov.myapplication
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,16 +20,20 @@ import retrofit2.Response
 
 class LoginFragment : Fragment() {
 
-    fun sendLoginRequest(email: String, password: String, callback: (String?) -> Unit) {
+    private fun sendLoginRequest(email: String, password: String, callback: (String?) -> Unit) {
         val userData = UserData(email, password)
+        val apiService = ApiClient.getNoTokenApiService()
 
-        val call = ApiClient.apiService.login(userData)
+
+        val call = apiService.login(userData)
         call.enqueue(object : Callback<AuthData> {
             override fun onResponse(call: Call<AuthData>, response: Response<AuthData>) {
                 println(response.body())
                 if (response.isSuccessful) {
                     val jwtToken = response.body()
+                    println("from login : " + jwtToken.toString())
                     callback(jwtToken.toString())
+
                 } else {
                     Toast.makeText(requireActivity(), "Неверные учетные данные", Toast.LENGTH_SHORT).show()
                     callback(null)
@@ -42,6 +44,28 @@ class LoginFragment : Fragment() {
                 println("Failed to make request: ${t.message}")
                 Toast.makeText(requireActivity(), "Ошибка при выполнении запроса", Toast.LENGTH_SHORT).show()
                 callback(null)
+            }
+        })
+    }
+
+    private fun sendGetUsernameRequest(callback: (Boolean) -> Unit) {
+        val apiService = ApiClient.getApiService(PreferencesHelper(requireContext()).getJwtToken().toString())
+        println("from get : " + PreferencesHelper(requireContext()).getJwtToken().toString())
+
+        val call = apiService.getUsername()
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    callback(true)
+                } else {
+                    callback(false)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                println("Failure: ${t.message}")
+                callback(false)
             }
         })
     }
@@ -61,16 +85,21 @@ class LoginFragment : Fragment() {
         val authBtn = root.findViewById<Button>(R.id.authBtn)
         val goRegistrationBtn = root.findViewById<Button>(R.id.goToRegistration)
         val password = root.findViewById<EditText>(R.id.password)
-        val checkBox = root.findViewById<CheckBox>(R.id.checkbox)
-
-        val loginData = requireActivity().getSharedPreferences("data", Context.MODE_PRIVATE)
 
         authBtn.setOnClickListener {
             if (inputText.text.isNotEmpty() && password.text.isNotEmpty()) {
                 sendLoginRequest(inputText.text.toString(), password.text.toString()) { jwtToken ->
                     if (jwtToken != null) {
                         storage.saveJwtToken(jwtToken)
-                        navController.navigate(R.id.lobbyFragment)
+                        println("token saved:" + jwtToken)
+                        sendGetUsernameRequest { isSuccess ->
+
+                            if (isSuccess) {
+                                navController.navigate(R.id.lobbyFragment)
+                            } else {
+                                navController.navigate(R.id.postRegistrationFragment)
+                            }
+                        }
                     }
                 }
             }

@@ -35,6 +35,9 @@ class ContentActivity : AppCompatActivity() {
                 R.id.registrationFragment -> {
                     bottom_nav.visibility = View.GONE
                 }
+                R.id.postRegistrationFragment ->{
+                    bottom_nav.visibility = View.GONE
+                }
                 else -> {
                     bottom_nav.visibility = View.VISIBLE
                 }

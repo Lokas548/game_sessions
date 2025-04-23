@@ -6,20 +6,28 @@ import android.content.SharedPreferences
 class PreferencesHelper(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
 
-    //Ключ для токена
+
     private val JWT_TOKEN_KEY = "jwt_token"
 
-    //Сохранение токена
     fun saveJwtToken(token: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString(JWT_TOKEN_KEY, token)
-        editor.apply()
+        clearJwtToken()
+        sharedPreferences.edit().putString(JWT_TOKEN_KEY, token).apply()
     }
 
-    //Получение токена
+
     fun getJwtToken(): String? {
-        return sharedPreferences.getString(JWT_TOKEN_KEY, null)
+
+        val token = sharedPreferences.getString(JWT_TOKEN_KEY, null)
+
+        if (token != null) {
+            val startIndex: Int = token.indexOf("jwtToken=") + "jwtToken=".length
+            println(token.substring(startIndex))
+            return token.substring(startIndex, token.length - 1)
+        }
+
+        return null
     }
+
 
     //Удаление токена
     fun clearJwtToken() {

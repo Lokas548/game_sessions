@@ -15,10 +15,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import com.mironov.myapplication.api.`interface`.ClientDto.UserData
 import com.mironov.myapplication.api.`interface`.ClientService.ApiClient
+import com.mironov.myapplication.api.`interface`.PreferencesHelper
 import com.mironov.myapplication.api.`interface`.ResponseMessage
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,7 +29,9 @@ class RegistrationFragment : Fragment() {
     fun sendRegistrationRequest(username: String, password: String, callback: (Boolean) -> Unit) {
         val userData = UserData(username, password)
 
-        val call = ApiClient.apiService.registration(userData)
+        val apiService = ApiClient.getNoTokenApiService()
+        val call = apiService.registration(userData)
+
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {

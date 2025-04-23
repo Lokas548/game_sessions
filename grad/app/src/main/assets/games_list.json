@@ -1,0 +1,17 @@
+[
+  { "id": 1,
+    "name": "Counter-strike 2",
+    "description": "tactical-shooter",
+    "maxLobbyCapacity": 5},
+
+  { "id": 2,
+    "name": "League of Legends",
+    "description": "MOBA",
+    "maxLobbyCapacity": 5},
+
+
+  { "id": 3,
+    "name": "Squad",
+    "description": "tactical-shooter",
+    "maxLobbyCapacity": 5}
+]
