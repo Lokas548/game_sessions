@@ -2,7 +2,7 @@ package com.mironov.sessions_app.service;
 
 import com.mironov.sessions_app.DTO.request.LobbyFilterRequest;
 import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
-import com.mironov.sessions_app.DTO.specifications.LobbySpecifications;
+import com.mironov.sessions_app.config.specifications.LobbySpecifications;
 import com.mironov.sessions_app.entity.LobbyEntity;
 import com.mironov.sessions_app.entity.LobbyMemberEntity;
 import com.mironov.sessions_app.entity.UserEntity;
