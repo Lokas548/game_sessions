@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +32,19 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
     }
 
-
     @PostMapping("/login")
     @Tag(name = "Авторизация")
-    public ResponseEntity<AuthTokenResponse> login(@RequestBody AuthDTO userAuthData){
+    public ResponseEntity login(@RequestBody AuthDTO userAuthData){
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthData.getEmail(), userAuthData.getPassword()));
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthData.getEmail(),userAuthData.getPassword()));
+            final UserEntity userEntity = userService.loadUserByEmail(userAuthData.getEmail());
+            final UserDetails user = userDetailsService.loadUserByUsername(userAuthData.getEmail());
 
-        final UserEntity userEntity = userService.loadUserByEmail(userAuthData.getEmail());
-        final UserDetails user = userDetailsService.loadUserByUsername(userAuthData.getEmail());
-
-        return ResponseEntity.ok(new AuthTokenResponse(jwtUtil.generateToken(user.getUsername(), userEntity.getId())));
+            return ResponseEntity.ok(new AuthTokenResponse(jwtUtil.generateToken(user.getUsername(), userEntity.getId())));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверные учетные данные");
+        }
     }
 
 

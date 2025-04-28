@@ -1,5 +1,6 @@
 package com.mironov.sessions_app.service;
 
+import com.mironov.sessions_app.DTO.request.CreateLobbyRequest;
 import com.mironov.sessions_app.DTO.request.LobbyFilterRequest;
 import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
 import com.mironov.sessions_app.config.specifications.LobbySpecifications;
@@ -36,23 +37,25 @@ public class LobbyService {
                 .orElseThrow(() -> new EntityNotFoundException("Lobby not found with id: " + lobbyId));
     }
 
-    public LobbyEntity createLobby(LobbyEntity lobbyParams){
+    public LobbyEntity createLobby(CreateLobbyRequest lobbyParams){
 
         //TODO Сделать гибкое создание лобби
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = userService.loadUserByEmail(authentication.getName());
 
-        LobbyEntity lobby = new LobbyEntity(1L,
-                lobbyParams.getName(),
+        LobbyEntity lobby = new LobbyEntity( lobbyParams.getGameId(),
+                lobbyParams.getLobbyName(),
                 userEntity,
                 LocalDateTime.now().toString(),
                 1L,
-                lobbyParams.isCompetitive());
+                lobbyParams.getCompetitive());
 
+
+        lobbyRepository.save(lobby);
         lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby,userEntity,LocalDateTime.now().toString()));
 
-        return lobbyRepository.save(lobby);
+        return lobby;
     }
 
     public List<FilteredLobbiesResponse> getFilteredLobbies(LobbyFilterRequest lobbyFilterRequest){

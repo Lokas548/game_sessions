@@ -1,5 +1,6 @@
 package com.mironov.sessions_app.controller;
 
+import com.mironov.sessions_app.DTO.request.CreateLobbyRequest;
 import com.mironov.sessions_app.DTO.request.LobbyFilterRequest;
 import com.mironov.sessions_app.DTO.response.FilteredLobbiesResponse;
 import com.mironov.sessions_app.entity.LobbyEntity;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,8 +54,14 @@ public class LobbyController {
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Получение информации о лобби")
     public ResponseEntity<LobbyEntity> getLobby(@RequestParam Long lobbyId){
-        LobbyEntity responseEntity = lobbyService.getLobbyById(lobbyId);
-        return ResponseEntity.ok(responseEntity);
+        try {
+            LobbyEntity responseEntity = lobbyService.getLobbyById(lobbyId);
+            return ResponseEntity.ok(responseEntity);
+
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 
@@ -68,7 +76,7 @@ public class LobbyController {
     @PostMapping("/create-lobby")
     @SecurityRequirement(name = "JWT")
     @Tag(name = "Создать лобби")
-    public ResponseEntity<LobbyEntity> createLobby(@RequestBody LobbyEntity lobby){
+    public ResponseEntity<LobbyEntity> createLobby(@RequestBody CreateLobbyRequest lobby){
         LobbyEntity responseEntity = lobbyService.createLobby(lobby);
         return ResponseEntity.ok(responseEntity);
     }
@@ -91,8 +99,10 @@ public class LobbyController {
         }
 
         lobbyService.currentCapacityIncrement(lobby);
+        lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
 
-        return lobbyMemberService.joinLobby(new LobbyMemberEntity(lobby, user, LocalDateTime.now().toString()));
+        return ResponseEntity.ok(lobby.getLobbyId());
+        //TODO с клиента нужно сразу подписать на топик по lobby.getLobbyId()
     }
 
 
